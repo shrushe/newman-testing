@@ -23,6 +23,5 @@ jobs:
       - name: Publish report
         uses: actions/upload-artifact@v3
         with:
-          file_path: 'C:/Users/ShruthiShetty/newman-testing/'
-          file_name: 'Day9Report.json'
-          file_type: 'json'
+          path: 'C:/Users/ShruthiShetty/newman-testing/'
+          name: 'Day9Report.json'
