@@ -19,4 +19,4 @@ jobs:
       - name: Install Newman
         run: npm install -g newman
       - name: Run Postman Collection
-        run: newman run WeatherAPITests_Day9postman_collection.json -e WeatherAPITesting_postman_environment.json -r json --reporter-json-export Day9Report.json
+        run: newman run WeatherAPITests_Day9postman_collection.json -e WeatherAPITesting_postman_environment.json -r json --reporter-json-export C:\Users\ShruthiShetty\newman-testing\Day9Report.json
