@@ -20,5 +20,12 @@ jobs:
         run: npm install -g newman
       - name: "Install newman reporter"
         run: "npm install -g newman-reporter-html"
+      - name: Make Directory for results
+        run: mkdir -p results
       - name: Run Postman Collection
-        run: newman run WeatherAPITests_Day9postman_collection.json -e WeatherAPITesting_postman_environment.json --reporters cli,html --reporter-html-export Day9Report1.html
+        run: newman run WeatherAPITests_Day9postman_collection.json -e WeatherAPITesting_postman_environment.json --reporters cli,html --reporter-html-export results/Day9Report1.html
+      - name: Output the run Details
+        uses: actions/upload-artifact@v2
+        with:
+          name: RunReports
+          path: results
