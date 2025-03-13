@@ -21,6 +21,7 @@ jobs:
       - name: Run Postman Collection
         run: newman run WeatherAPITests_Day9postman_collection.json -e WeatherAPITesting_postman_environment.json --reporters cli,json
       - name: Publish report
+        uses: actions/upload-artifact@v3
         with:
           file_path: 'C:/Users/ShruthiShetty/newman-testing/'
           file_name: 'Day9Report.json'
