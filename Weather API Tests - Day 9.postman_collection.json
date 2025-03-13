@@ -1,0 +1,362 @@
+{
+	"info": {
+		"_postman_id": "606fd574-d133-480f-9165-b02b59f568c7",
+		"name": "Weather API Tests - Day 9",
+		"description": "Using Newman for Automated Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42830282"
+	},
+	"item": [
+		{
+			"name": "Exercise 6: Check temp_min is never greater than temp_max",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Temp min is not greater than temp max\", function(){\r",
+							"    let jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.main.temp_min).to.be.at.most(jsonData.main.temp_max);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?lat={{lat}}&lon={{lon}}&units={{units}}&appid={{api_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "lat",
+							"value": "{{lat}}"
+						},
+						{
+							"key": "lon",
+							"value": "{{lon}}"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exercise 6: Check if the city name contains at least one vowel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Updated the test script to fix the TypeError\r",
+							"pm.test(\"City name contains at least one vowel\", function(){\r",
+							"    let jsonData = pm.response.json();\r",
+							"    let city = jsonData.name;\r",
+							"    let vowels = ['a', 'e', 'i', 'o', 'u','A', 'E', 'I', 'O', 'U'];\r",
+							"    let containsVowel = false;\r",
+							"    for (let i = 0; i < city.length; i++) {\r",
+							"        if (vowels.includes(city[i])) {\r",
+							"            containsVowel = true;\r",
+							"            break;\r",
+							"        }\r",
+							"    }\r",
+							"    pm.expect(containsVowel).to.be.true;   \r",
+							"});\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?q=Calgary&units={{units}}&appid={{api_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Calgary"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BETTER CODE: Exercise 6: Check if the city name contains at least one vowel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"City name contains at least one vowel\", function(){\r",
+							"    pm.expect(pm.response.json().name).to.contain.oneOf(['a', 'e', 'i', 'o', 'u','A', 'E', 'I', 'O', 'U']); \r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?q=Calgary&units={{units}}&appid={{api_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Calgary"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Exercise 6: Error message when given an invalid API key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"API Key is invalid\", function(){\r",
+							"    pm.response.to.have.status(401);\r",
+							"    var jsonData =pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.contains(\"Invalid API key.\"); \r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?q=Calgary&units={{units}}&appid={{InvalidKey}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Calgary"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{InvalidKey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TWO REQUESTS: Exercise 6: Error message when given an invalid API key",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"API Key is invalid for Request 1\", function(){\r",
+							"    pm.response.to.have.status(401);\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.include(\"Invalid API key.\"); \r",
+							"});\r",
+							"\r",
+							"var invalidkey = pm.environment.get(\"InvalidKey\");\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: `https://api.openweathermap.org/data/2.5/forecast?appid=${invalidkey}&q=Calgary`, \r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"}, function (err, res){\r",
+							"    pm.test(\"API Key is invalid for Request 2\", function () {\r",
+							"        pm.expect(res).to.have.status(401);\r",
+							"    });\r",
+							"   /* if(err.message){\r",
+							"        console.error(\"Error:\", err.message);\r",
+							"        return;\r",
+							"    }  \r",
+							"    // OR below code\r",
+							"    if(err){\r",
+							"        console.error(\"Error:\", err);\r",
+							"        return;\r",
+							"    } */\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?q=Calgary&units={{units}}&appid={{InvalidKey}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Calgary"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{InvalidKey}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BETTER CODE: Exercise 7: Chaining Requests in Postman",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var cityId1 = pm.response.json().id;\r",
+							"pm.environment.set(\"cityId\",cityId1);\r",
+							"console.log(\"First Request city id:\"+pm.environment.get(\"cityId\"));\r",
+							"var apikey = pm.environment.get(\"api_key\");\r",
+							"\r",
+							"pm.sendRequest({\r",
+							"    url: `https://api.openweathermap.org/data/2.5/forecast?appid=${apikey}&id=${cityId1}`, \r",
+							"    method: 'GET',\r",
+							"    header: {\r",
+							"        'Content-Type': 'application/json'\r",
+							"    }\r",
+							"}, function (err, res){\r",
+							"        var cityId2 = res.json().city.id;\r",
+							"        console.log(\"Second Request city id:\"+cityId2);\r",
+							"        pm.test(\"Status code is 200\", function () {\r",
+							"            pm.expect(res).to.have.status(200);\r",
+							"        });\r",
+							"        pm.test(\"The city id in both responses matches\", function () {\r",
+							"            pm.expect(pm.environment.get(\"cityId\")).to.eqls(cityId2);\r",
+							"        });\r",
+							"});        \r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/weather?q=Calgary&units={{units}}&appid={{api_key}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"weather"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "Calgary"
+						},
+						{
+							"key": "units",
+							"value": "{{units}}"
+						},
+						{
+							"key": "appid",
+							"value": "{{api_key}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
